@@ -1,21 +1,38 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, toRefs } from 'vue'
+
+interface Social {
+  icon: string //iconify-like icon code
+  handler: string
+  link: string
+}
+
+interface Props {
+  github: string
+  socials: Social[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  github: 'alexislopes',
+  socials: () => [
+    {
+      icon: 'tabler:brand-x',
+      handler: 'panzeeh',
+      link: 'https://twitter.com/panzeeh'
+    },
+    {
+      icon: 'mdi:instagram',
+      handler: 'alexislopes',
+      link: 'https://www.instagram.com/alexislopes/'
+    }
+  ]
+})
+
+const { github, socials } = toRefs(props)
 
 const index = ref(0)
-const socials = ref([
-  {
-    icon: 'tabler:brand-x',
-    handler: 'panzeeh',
-    link: 'https://twitter.com/panzeeh'
-  },
-  {
-    icon: 'mdi:instagram',
-    handler: 'alexislopes',
-    link: 'https://www.instagram.com/alexislopes/'
-  }
-])
 
-const { data } = await useAsyncData('user', () => $fetch('https://api.github.com/users/alexislopes'))
+const { data } = await useAsyncData('user', () => $fetch('https://api.github.com/users/' + github.value))
 
 const { pause, resume, isActive } = useIntervalFn(() => {
   index.value++
@@ -30,21 +47,23 @@ const social = computed(() => socials.value[index.value])
 </script>
 
 <template>
-<div class="flex hover:shadow-md w-fit py-2 px-4  rounded-full gap-4 items-center">
-  <img class="rounded-full w-[40px] h-[40px]" :src="data.avatar_url" alt="">
-  <div class="relative">
-    <a href="https://alexislopes.github.io/alexisme/" target="_blank" class="flex items-center gap-2">
-      <p class="text-lg hover:underline">{{ data.name }}</p>
-      <Icon name="fa6-solid:angle-right" class="!text-[11px]"/>
-    </a>
-    <a :href="social.link" target="_blank">
-      <div :key="index" class="flex items-center gap-1">
-        <Icon :name="social.icon" />
-        <p class="text-sm hover:underline">{{ social.handler }}</p>
-      </div>
-    </a>
+  <div class="flex hover:shadow-lg w-fit py-2 px-3 rounded-full gap-4 items-center">
+    <img class="rounded-full w-[45px] h-[45px]" :src="data.avatar_url" alt="">
+    <div class="relative flex flex-col">
+      <span class="text-[8px] text-center mb-[2px]">Developed with 💘 by</span>
+
+      <a href="https://alexislopes.github.io/alexisme/" target="_blank" class="flex items-center gap-2">
+        <p class="text-lg hover:underline !leading-3">{{ data.name }}</p>
+        <Icon name="fa6-solid:angle-right" class="!text-[11px]" />
+      </a>
+      <a :href="social.link" target="_blank" class="pt-[5px]">
+        <div :key="index" class="flex items-center gap-1">
+          <Icon :name="social.icon" />
+          <p class="text-sm hover:underline">{{ social.handler }}</p>
+        </div>
+      </a>
+    </div>
   </div>
-</div>
 </template>
 
 <style scoped></style>

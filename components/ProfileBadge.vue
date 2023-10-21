@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, toRefs } from 'vue'
+import { computed, ref, toRefs } from 'vue';
 
 interface Social {
   icon: string //iconify-like icon code
@@ -10,15 +10,17 @@ interface Social {
 interface Props {
   github: string
   socials: Social[]
+  website: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   github: 'alexislopes',
+  website: "https://alexislopes.github.io/alexisme/",
   socials: () => [
     {
       icon: 'tabler:brand-x',
-      handler: 'panzeeh',
-      link: 'https://twitter.com/panzeeh'
+      handler: 'alexislxpes',
+      link: 'https://twitter.com/alexoslxpes'
     },
     {
       icon: 'mdi:instagram',
@@ -28,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
   ]
 })
 
-const { github, socials } = toRefs(props)
+const { github, socials, website } = toRefs(props)
 
 const index = ref(0)
 
@@ -39,8 +41,6 @@ const { pause, resume, isActive } = useIntervalFn(() => {
   if (index.value + 1 > socials.value.length) {
     index.value = 0
   }
-
-  console.log(index.value)
 }, 3000)
 
 const social = computed(() => socials.value[index.value])
@@ -52,7 +52,7 @@ const social = computed(() => socials.value[index.value])
     <div class="relative flex flex-col">
       <span class="text-[8px] text-center mb-[2px]">Developed with 💘 by</span>
 
-      <a href="https://alexislopes.github.io/alexisme/" target="_blank" class="flex items-center gap-2">
+      <a :href="website" target="_blank" class="flex items-center gap-2">
         <p class="text-lg hover:underline !leading-3">{{ data.name }}</p>
         <Icon name="fa6-solid:angle-right" class="!text-[11px]" />
       </a>

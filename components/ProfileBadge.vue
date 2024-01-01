@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
     {
       icon: 'tabler:brand-x',
       handler: 'alexislxpes',
-      link: 'https://twitter.com/alexoslxpes'
+      link: 'https://twitter.com/alexislxpes'
     },
     {
       icon: 'mdi:instagram',
